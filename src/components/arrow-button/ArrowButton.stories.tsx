@@ -13,7 +13,15 @@ export const ArrowButtonStory: Story = {
 	render: () => {
 		return (
 			<>
-				<ArrowButton />
+				<ArrowButton>
+					{{
+						isOpen: false,
+						handler: () => {
+							console.log(true);
+						},
+						arrowRef: null,
+					}}
+				</ArrowButton>
 			</>
 		);
 	},
