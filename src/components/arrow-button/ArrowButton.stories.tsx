@@ -18,7 +18,6 @@ export const ArrowButtonStory: Story = {
 					handler={() => {
 						console.log(true);
 					}}
-					arrowRef={null}
 				/>
 			</>
 		);

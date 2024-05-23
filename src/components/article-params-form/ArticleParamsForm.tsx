@@ -19,7 +19,7 @@ import { Select } from '../select';
 import { RadioGroup } from '../radio-group';
 
 type TArticleParamsFormProps = {
-	setDataPage: React.Dispatch<React.SetStateAction<ArticleStateType>>;
+	setDataPage: (data: ArticleStateType) => void;
 };
 
 export const ArticleParamsForm = ({ setDataPage }: TArticleParamsFormProps) => {
@@ -27,24 +27,15 @@ export const ArticleParamsForm = ({ setDataPage }: TArticleParamsFormProps) => {
 	const [dataForm, setDataForm] =
 		useState<ArticleStateType>(defaultArticleState);
 	const panelRef = useRef<HTMLElement | null>(null);
-	const arrowRef = useRef<HTMLDivElement | null>(null);
 
-	const handleTogglePanel = (e: React.BaseSyntheticEvent | MouseEvent) => {
-		e.stopPropagation();
-		if (!isOpen) setStateIsOpen(true);
-		else setStateIsOpen(false);
+	const handleTogglePanel = () => {
+		setStateIsOpen(!isOpen);
 	};
 
 	const handleClosePanelWithOverlay = (
 		e: React.BaseSyntheticEvent | MouseEvent
 	) => {
-		if (
-			isOpen &&
-			panelRef.current &&
-			arrowRef.current &&
-			!panelRef.current.contains(e.target) &&
-			!arrowRef.current.contains(e.target)
-		) {
+		if (isOpen && panelRef.current && !panelRef.current.contains(e.target)) {
 			setStateIsOpen(false);
 		}
 	};
@@ -68,18 +59,16 @@ export const ArticleParamsForm = ({ setDataPage }: TArticleParamsFormProps) => {
 	};
 
 	useEffect(() => {
-		document.addEventListener('mousedown', handleClosePanelWithOverlay);
+		if (isOpen)
+			document.addEventListener('mousedown', handleClosePanelWithOverlay);
+
 		return () =>
 			document.removeEventListener('mousedown', handleClosePanelWithOverlay);
-	});
+	}, [isOpen]);
 
 	return (
 		<>
-			<ArrowButton
-				isOpen={isOpen}
-				handler={handleTogglePanel}
-				arrowRef={arrowRef}
-			/>
+			<ArrowButton isOpen={isOpen} handler={handleTogglePanel} />
 			<aside
 				ref={panelRef}
 				className={clsx({
